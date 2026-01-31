@@ -1,4 +1,4 @@
-WIP ( Work in Progress ) Jan 30th 2026
+WIP ( Work in Progress ) Jan 31th 2026
 
 # Consumer Credit “Cica PRIME” Risk & Portfolio Analytics  
 **Risk Management • Portfolio Analytics • Forecasting • Stress Testing**
@@ -56,8 +56,67 @@ Consumer lending analytics and KPI design, credit portfolio performance analysis
 
 **4 — Portfolio Fragility & Stress Testing**
 
-1. **Macro stress & portfolio survival ** <br> Under adverse macroeconomic scenarios, can portfolio revenue absorb stressed credit losses without threatening business viability?
+1. **Macro stress & portfolio survival** <br> Under adverse macroeconomic scenarios, can portfolio revenue absorb stressed credit losses without threatening business viability?
 
+<br>
+
+**➤ Executive Summary:**
+WORK IN PROGRESS !!!
+FOR LATER.
+
+<br>
+
+**➤ The Main Report**
+
+**Dataset**
+
+The raw dataset spans January 2023 through December 2025, and all reporting and conclusions in this project are intentionally scoped to this full three-year period to evaluate portfolio growth, seasonality, underwriting changes, and macro-driven risk cycles, while supporting time-series forecasting, predictive modeling, portfolio risk analytics, and stress testing in a consistent analytical framework.
+
+The analysis uses seven core tables representing a consumer installment lending product (“CICA Prime”):
+
+**customers**
+- One row per customer
+- Contains signup_date, acquisition channel, risk_tier_at_signup, and demographic buckets (income_band, region, age_band)
+- Used to define customer cohorts, segment performance, and build customer-level features for LTV / churn / PD modeling
+
+
+**applications**
+- One row per credit application
+- Contains application date, approval/decline decision, approved amount, and a synthetic decision_score with reason codes for declines
+- Used to analyze conversion funnels, approval rates, underwriting shifts over time, and credit policy tightening/loosening
+
+
+**loans**
+- One row per booked loan
+- Contains origination details (principal, term_months, apr, origination fees), merchant category, and lifecycle outcomes (loan_status, default_date)
+- Used as the central table for portfolio analytics, risk segmentation, PD/LGD/EAD construction, and cohort/vintage analysis
+
+
+**payment_schedule**
+- One row per contractual installment
+- Contains due_date and the contractual split between due_principal and due_fee_interest, plus scheduled remaining balance
+- Used to measure scheduled cash flows, delinquency timing, and to establish the “what should have happened” baseline for forecasting and variance analysis
+
+
+**payments**
+- One row per cash event
+- Contains payment_date, payment_amount, split between paid_principal and paid_fee_interest, plus payment_type (scheduled, partial, refund, recovery)
+- Used to measure actual cash collections, revenue realized through fees/interest, delinquency behavior, recoveries after default, and net loss outcomes
+
+
+**macro_monthly**
+- One row per month per scenario
+- Contains monthly macro indexes (unemployment_index, rates_index, consumer_stress_index) for baseline, adverse, and severe scenarios
+- Used for stress testing, scenario comparison, and macro-driven sensitivity analysis of delinquency/default behavior and portfolio losses
+
+
+**budget_plan_monthly**
+- One row per month per plan scenario
+- Contains planned originations, cash inflow, revenue, and net losses under base vs stretch plans
+- Used for budget vs actual variance modeling, planning accuracy evaluation, and “what management expected vs what happened” analysis
+
+**dim_month**
+- Calendar spine to help with time series modeling.
 
 
 
