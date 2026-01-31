@@ -125,14 +125,12 @@ How did total portfolio interest and fee revenue perform on a monthly basis from
 - payments
 - dim_month ( the calendar spine )
 
-**Method**
-
-**SQL**
+**SQL Method**
 - Filter gross revenue (`paid_fee_interest`) for all `payment_type` labeled `scheduled` or `partial`.
 - Aggregate monthly realized interest and fee revenue using `payment_date`, converted to a `year_month` configuration.
 - Left join to a calendar spine to ensure zero-revenue months are included.
 
-**Python**
+**Python Method**
 - Load the monthly revenue output from SQL and index it by `year_month` as a monthly time series (`.asfreq("MS")`).
 - Run STL decomposition (`period=12`) and plot the trend, seasonal, and residual components to diagnose revenue structure.
 - Fit the historical monthly revenue series into a seasonal SARIMA model to capture short-term dynamics and yearly seasonality.
