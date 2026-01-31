@@ -79,36 +79,30 @@ The analysis uses seven core tables representing a consumer installment lending 
 - Contains signup_date, acquisition channel, risk_tier_at_signup, and demographic buckets (income_band, region, age_band)
 - Used to define customer cohorts, segment performance, and build customer-level features for LTV / churn / PD modeling
 
-
 **applications**
 - One row per credit application
 - Contains application date, approval/decline decision, approved amount, and a synthetic decision_score with reason codes for declines
 - Used to analyze conversion funnels, approval rates, underwriting shifts over time, and credit policy tightening/loosening
-
 
 **loans**
 - One row per booked loan
 - Contains origination details (principal, term_months, apr, origination fees), merchant category, and lifecycle outcomes (loan_status, default_date)
 - Used as the central table for portfolio analytics, risk segmentation, PD/LGD/EAD construction, and cohort/vintage analysis
 
-
 **payment_schedule**
 - One row per contractual installment
 - Contains due_date and the contractual split between due_principal and due_fee_interest, plus scheduled remaining balance
 - Used to measure scheduled cash flows, delinquency timing, and to establish the “what should have happened” baseline for forecasting and variance analysis
-
 
 **payments**
 - One row per cash event
 - Contains payment_date, payment_amount, split between paid_principal and paid_fee_interest, plus payment_type (scheduled, partial, refund, recovery)
 - Used to measure actual cash collections, revenue realized through fees/interest, delinquency behavior, recoveries after default, and net loss outcomes
 
-
 **macro_monthly**
 - One row per month per scenario
 - Contains monthly macro indexes (unemployment_index, rates_index, consumer_stress_index) for baseline, adverse, and severe scenarios
 - Used for stress testing, scenario comparison, and macro-driven sensitivity analysis of delinquency/default behavior and portfolio losses
-
 
 **budget_plan_monthly**
 - One row per month per plan scenario
@@ -117,6 +111,7 @@ The analysis uses seven core tables representing a consumer installment lending 
 
 **dim_month**
 - Calendar spine to help with time series modeling.
+- This is an additional "tool" to help with the calculation. Not data in itself.
 
 
 
