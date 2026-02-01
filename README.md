@@ -182,11 +182,10 @@ How stable / reliable are monthly collection gaps across this period?
 - SQL output: one clean monthly table with columns(year_month, scheduled_cash, actual_cash, cash_flow_gap)
 
 **Python Method**
-- Load the monthly table that shows how much money was expected to be paid and how much was actually paid.
-- Calculate the monthly difference between expected and actual payments, and how big that difference is compared to what was expected.
-- Summarize these differences by computing the typical shortfall or surplus, how much the differences vary from month to month, and how often payments fall short.
-- Identify periods where shortfalls happen for several months in a row and record when those periods start, end, and how long they last.
-- Measure whether shortfalls mostly happen on their own or tend to appear in multi-month clusters.
+- Load the monthly table that shows how much cash was expected and how much cash was actually collected for each month.
+- For each month, calculate the cash gap percentage by dividing the difference between actual and expected cash by the expected cash.
+- Summarize the results by reporting the average gap percentage, how much the gap percentage varies from month to month, and how often monthly cash collection is below expectations.
+- Plot the monthly cash gap percentage over time and label each month with its exact value so the chart is easy to read.
 
 
 
