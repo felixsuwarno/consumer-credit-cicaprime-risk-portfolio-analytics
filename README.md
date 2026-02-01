@@ -220,14 +220,48 @@ Did actual revenue earned, cash collected, and credit losses differ from what ma
 <br>
 
 **SQL Method :**
-- Aggregate monthly actual realized revenue from payments (sum of paid_fee_interest, using payment_date -> year_month, filtering to true customer payments such as scheduled and partial).
-- Aggregate monthly actual cash inflows from payments (sum of payment_amount, using payment_date -> year_month, treating recoveries as positive and refunds as negative so it is net cash).
-- Aggregate monthly actual net credit losses using one consistent rule (use default_date -> year_month to time the write-off, then subtract recovery cash received in the same month).
-- Aggregate monthly budgeted revenue, cash inflows, and losses from budget_plan_monthly by year_month and scenario.
-- Align actuals and budgets on the same monthly calendar spine and join by year_month + scenario.
-- Compute monthly variances for each metric -> variance_abs = actual − budget, variance_pct = (actual − budget) / budget.
-- SQL output: one clean monthly table with columns (year_month, scenario, revenue_actual, revenue_budget, revenue_var_abs, revenue_var_pct, cash_actual, cash_budget, cash_var_abs, cash_var_pct, loss_actual, loss_budget, loss_var_abs, loss_var_pct).
+This work produces two monthly tables that will eventually be joined on year_month, Monthly actuals table and Monthly budget table.
 
+**Monthly Actuals** (what really happened) 
+-> it has three columns, "**actual_revenue**" , "**actual_cash**" , "**actual_loss**", all in year_month.
+
+For the "**actual_revenue**":
+1. Use the payments table.
+2. Keep only scheduled and partial payments.
+3. Sum interest and fees actually paid.
+4. Group the results by month.
+5. Show zero for months with no revenue.
+
+For the "**actual_cash**":
+1. Use the payments table.
+2. Add up all payment amounts.
+3. Group the results by month.
+4. Show zero for months with no cash.
+
+For the "**actual_loss**":
+1. On the loans table, filter loans that defaulted using default_date IS NOT NULL.
+2. Join those defaulted loans to the payments table by loan_id, keeping only payment rows with payment_date <= default_date.
+3. For each loan, sum paid_principal using only payment_type IN ('scheduled','partial').
+4. Compute unpaid principal at default as principal - principal_paid_pre_default.
+5. Group unpaid principal by the month of the default_date.
+6. Separately, from the payments table, sum payment_amount by month where payment_type = 'recovery'.
+7. Align both monthly series on the same month calendar and fill missing months with 0.
+8. Subtract recovered principal from unpaid principal to get actual_loss.
+
+**Monthly Budget** (what management had planned ) 
+- Use the budget_plan_monthly source table at monthly grain (year_month).
+- Budget values are already provided in a pivoted format with fixed scenarios and metrics.
+- Select one row per year_month containing:
+	base_budget_for_revenue
+	stretch_budget_for_revenue
+	base_budget_for_cash
+	stretch_budget_for_cash
+	base_budget_for_loss
+	stretch_budget_for_loss
+- Join to the calendar spine to ensure all months are present.
+- Fill missing budget values with 0 to align with monthly actuals.
+- Output a single monthly budget table to be joined to monthly actuals on year_month.
+- 
 <br>
 
 **Python Method :**
