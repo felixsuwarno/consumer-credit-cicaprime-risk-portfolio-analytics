@@ -162,7 +162,7 @@ How did total portfolio interest and fee revenue perform on a monthly basis from
 - The 12-month SARIMA forecast shows revenue continuing to rise beyond 2025, with even the conservative (lower-bound) forecast increasing over time.
 - Forecast uncertainty increases gradually over the horizon, but the lower confidence bound remains well above earlier historical revenue levels.
 
-<br>
+<br><br>
 
 **1.2. Cash Inflows vs Contractual Expectations**
 
