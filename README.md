@@ -261,7 +261,7 @@ For the "**actual_loss**":
 - Join to the calendar spine to ensure all months are present.
 - Fill missing budget values with 0 to align with monthly actuals.
 - Output a single monthly budget table to be joined to monthly actuals on year_month.
-- 
+  
 <br>
 
 **Python Method :**
