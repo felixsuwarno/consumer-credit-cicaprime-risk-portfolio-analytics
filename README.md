@@ -195,8 +195,13 @@ How stable / reliable are monthly collection gaps across this period?
   <img src="Charts/01_2_scheduled_vs_actual_cash_flow.png" width="100%">
 </p>
 
+<br>
 
-
+**Key Insights**
+- Collections fall below schedule in most months, with about 86% of months collecting less cash than contractually expected.
+- The typical monthly shortfall is modest and steady, averaging roughly 4–5% below plan.
+- Large negative gaps are uncommon, as most months cluster within a narrow under-collection range.
+- There is no sign of worsening over time, with the size and volatility of gaps remaining broadly stable from 2023 through 2025.
 
 
 
