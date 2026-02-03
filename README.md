@@ -261,15 +261,30 @@ For the "**actual_loss**":
 - Join to the calendar spine to ensure all months are present.
 - Fill missing budget values with 0 to align with monthly actuals.
 - Output a single monthly budget table to be joined to monthly actuals on year_month.
+
+**Result** :
+A table with these columns
+
+year_month,
+
+actual_revenue,
+budget_base_for_revenue,
+budget_stretch_for_revenue,
+
+actual_cash,
+budget_base_for_cash,
+budget_stretch_for_cash,
+
+actual_loss,
+budget_base_for_loss,
+budget_stretch_for_loss
   
 <br>
 
 **Python Method :**
-- Load the final monthly table from SQL (one row per year_month).
-- Convert year_month to a monthly datetime index, sort ascending, and confirm there is exactly one row per month.
-- Compute variance columns for each metric (actual_revenue, actual_cash, actual_loss) against both base and stretch budgets, including absolute variance and percent variance (percent only when the budget value is not zero).
-- Validate sign conventions and completeness: loss is “worse when bigger,” and missing budget/actual values are handled consistently (no unexpected nulls).
-- Summarize planning accuracy for each metric and scenario using a small set of error stats (one absolute error measure and one percent error measure).
-- Measure how often actuals beat plan using directionally correct rules: revenue and cash are better when higher; loss is better when lower.
-- Check persistence of misses by looking at variance over time with a rolling average (to separate “one-off” spikes from long-running bias).
-- Produce outputs: a single variance table, a compact accuracy summary table, and 3 time-series charts (variance for revenue, cash, loss) comparing base vs stretch.
+- Read the pre-aggregated monthly budget vs actual CSV
+- Compute monthly variance by subtracting each budget value (Base and Stretch) from the actual result, so each variance column directly measures how far real performance deviated from plan in dollars.
+- Convert each monthly dollar variance into a percent of the budget, so the size of the gap is comparable across months; for losses, a positive percent means losses exceeded plan.
+- This delivers 3 charts ( each for Revenue, Cash, Net Credit Loss ), each chart is a 2-row stacked figure. Top chart is the Budget VS Actual, bottom chart is the Monthly Variance % vs Base + Stretch with a zero line.
+
+
