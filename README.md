@@ -287,4 +287,39 @@ budget_stretch_for_loss
 - Convert each monthly dollar variance into a percent of the budget, so the size of the gap is comparable across months; for losses, a positive percent means losses exceeded plan.
 - This delivers 3 charts ( each for Revenue, Cash, Net Credit Loss ), each chart is a 2-row stacked figure. Top chart is the Budget VS Actual, bottom chart is the Monthly Variance % vs Base + Stretch with a zero line.
 
+<br>
+
+**Charts**
+
+<p align="center">
+  <img src="Charts/01_3a_budget_vs_actual_on_revenue.png" width="100%">
+</p>
+
+**Key Insights**
+- Actual revenue increases steadily over time.
+- Actual revenue is below both Base and Stretch budgets in nearly every month.
+- The dollar gap between actual revenue and budget grows as the portfolio scales.
+- Revenue shortfall narrows slightly over time but does not close.
+
+<br>
+
+<p align="center">
+  <img src="Charts/01_3b_budget_vs_actual_on_cash.png" width="100%">
+</p>
+
+<br>
+
+<p align="center">
+  <img src="Charts/01_3c_budget_vs_actual_on_credit_loss.png" width="100%">
+</p>
+
+<br>
+
+**Key Insights**
+- Collections fall below schedule in most months, with about 86% of months collecting less cash than contractually expected.
+- The typical monthly shortfall is modest and steady, averaging roughly 4–5% below plan.
+- Large negative gaps are uncommon, as most months cluster within a narrow under-collection range.
+- There is no sign of worsening over time, with the size and volatility of gaps remaining broadly stable from 2023 through 2025.
+
+<br><br>
 
