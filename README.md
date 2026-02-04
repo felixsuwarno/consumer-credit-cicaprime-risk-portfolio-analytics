@@ -327,7 +327,7 @@ budget_stretch_for_loss
 - Losses show high month-to-month volatility, reflecting the uneven timing of defaults.
 - Losses increase as the portfolio ages, consistent with loan seasoning effects.
 - Large variance percentages are driven by low planned losses, not by extreme absolute loss levels.
-- Even when losses exceed plan, they remain small relative to revenue and cash, preserving portfolio viability..
+- Across the whole period, the money lost from unpaid loans is small compared to the money the business earns and collects. Even in months where losses are higher than planned, the business still brings in far more cash than it loses, so it can easily absorb those losses.
 
 <br><br>
 
