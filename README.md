@@ -353,7 +353,17 @@ How long does it take customers to activate into credit usage by originating the
 **Python Method**
 - Compute and visualize activation-time metrics by signup month, applying a cutoff defined as last month in the data minus 18 months so that only fully observable cohorts are included in trend analysis.
   
-
 <br>
 
+**Charts**
 
+<p align="center">
+  <img src="Charts/02_1_customer_activation_timing.png" width="100%">
+</p>
+
+**Key Insights**
+- For fully observed cohorts (before the cutoff), both average and median activation days steadily decline, indicating faster activation over time.
+- The median is consistently lower than the average, showing that activation times are right-skewed with a long tail of late activators.
+- The sharp drop in activation days after the cutoff is not meaningful because those cohorts are not fully observed.
+- Activated customer counts increase while activation times decrease before the cutoff, indicating improved activation speed without sacrificing volume.
+- Early cohorts show higher volatility in activation timing, likely due to process immaturity or smaller sample sizes.
