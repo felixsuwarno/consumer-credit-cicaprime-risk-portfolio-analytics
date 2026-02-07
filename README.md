@@ -370,6 +370,7 @@ How long does it take customers to activate into credit usage by originating the
 - Early cohorts show higher volatility in activation timing, likely due to process immaturity or smaller sample sizes.
 
 <br>
+<br>
 
 **2.2. Borrower Inactivity & Churn Risk**
 
