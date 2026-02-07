@@ -381,14 +381,14 @@ Which customers are likely to stop borrowing or become inactive after their init
 - loans — loan timing and frequency
 
 **SQL Method**
-- Build customer loan timeline: create one row per loan with customer_id, origination_date, and a loan sequence number per customer.
-- Select the first loan per customer: keep only loan sequence = 1 to define first_loan_date for each customer.
-- Find the second loan date (if any): for each customer, find the earliest origination_date where loan sequence = 2 as second_loan_date.
-- Define the churn window: set window_end_date = first_loan_date + churn_window_days (use a fixed rule like 180 days).
-- Create churn label: set churn_flag = 1 if second_loan_date is null or second_loan_date > window_end_date; otherwise churn_flag = 0.
-- Create first-loan features: keep first-loan fields used for prediction (example: principal, term_months, apr, merchant category if relevant), using only information available at origination.
-- Attach customer attributes (including signup_date): join to customers and bring in signup_date plus stable attributes (channel, risk tier at signup, income band, region, age band).
-- Assemble customer-level churn table: output one row per customer with customer_id, signup_date, first_loan_date, second_loan_date, window_end_date, churn label, and features.
+- **Build customer loan timeline**: create one row per loan with **customer_id**, **origination_date**, and a loan sequence number per customer.
+- **Select the first loan per customer**: keep only loan sequence = 1 to define **first_loan_date** for each customer.
+- **Find the second loan date (if any)**: for each customer, find the earliest **origination_date** where loan sequence = 2 as **second_loan_date**.
+- **Define the churn window**: set **window_end_date** = **first_loan_date** + **churn_window_days** (use a fixed rule like 180 days).
+- **Create churn label**: set **churn_flag** = 1 if **second_loan_date** is null or **second_loan_date** > **window_end_date**; otherwise **churn_flag** = 0.
+- **Create first-loan features**: keep first-loan fields used for prediction (example: **principal**, **term_months**, **apr**, merchant category if relevant), using only information available at origination.
+- **Attach customer attributes** (including signup_date): join to customers and bring in **signup_date** plus stable attributes (channel, risk tier at signup, income band, region, age band).
+- **Assemble customer-level churn table**: output one row per customer with **customer_id**, **signup_date**, **first_loan_date**, **second_loan_date**, **window_end_date**, churn label, and features.
 
 **Python Method**
 - Compute and visualize activation-time metrics by signup month, applying a cutoff defined as last month in the data minus 18 months so that only fully observable cohorts are included in trend analysis.
