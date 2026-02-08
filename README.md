@@ -399,7 +399,7 @@ Which customers are likely to stop borrowing or become inactive after their init
 - **Attach customer attributes**: <br>
 	Join the score to the customers table to add stable customer information.
 - **Output the final table**: <br>
-  	Attach the inactivity score to customer table, send this for Python.
+  	Attach the inactivity score to customer table, send this for Python. Note that customers who are not "included", meaning the inactive_score is NULL, will be excluded from this table. 
 
 **Python Method**
 - Compute and visualize activation-time metrics by signup month, applying a cutoff defined as last month in the data minus 18 months so that only fully observable cohorts are included in trend analysis.
