@@ -381,19 +381,47 @@ Which customers are likely to stop borrowing or become inactive after their init
 - loans — loan timing and frequency
 
 **SQL Method**
-- **Order loans and set end date**: Assign a fixed portfolio end date (2025-12-31) and number each customer’s loans by origination date (and loan_id for ties) so we can consistently identify “first” and “second” loans.
-- **Isolate the first loan**: Keep only loan_number = 1 per customer to define the first_loan_id and first_loan_date, which anchors the customer’s borrowing start.
-- **Isolate the second loan**: Keep only loan_number = 2 per customer to capture the earliest “return borrowing” event (second_loan_id, second_loan_date) if it exists.
-- **Create the 180-day return window**: Join first and second loans and compute daydate_180 = first_loan_date + 180 days to define the return window boundary.
-- **Apply an observability cutoff** (include_flag): Mark customers as included only if daydate_180 is on or before 2025-12-31, so every included customer has a fully observable 180-day return window.
+- The initial loan is defined as the earliest loan origination for each customer, ordered by origination date and loan ID.
+- **Order loans and set end date**: Assign a fixed portfolio end date (2025-12-31) and number each customer’s loans by origination date (and **loan_id** for ties) so we can consistently identify “first” and “second” loans.
+- **Isolate the first loan**: Keep only **loan_number** = 1 per customer to define the **first_loan_id** and **first_loan_date**, which anchors the customer’s borrowing start.
+- **Isolate the second loan**: Keep only **loan_number** = 2 per customer to capture the earliest “return borrowing” event (**second_loan_id**, **second_loan_date**) if it exists.
+- **Create the 180-day return window**: Join first and second loans and compute **daydate_180** = **first_loan_date** + 180 days to define the return window boundary.
+- **Apply an observability cutoff** (include_flag): Mark customers as included only if **daydate_180** is on or before 2025-12-31, so every included customer has a fully observable 180-day return window.
 - **Calculate inactivity score** :
-	- For customers are not included the score is set to NULL
-	- Included and has no second loan, assign score = 1
-	- Included and second loan is within 180 days, calculate score = days between loans ÷ 180
-	- Included and second loan is outside 180 days, assign score = 1
-- **Output the modeling spine** : Return one row per customer containing first/second loan timing, the 180-day window boundary, the include_flag, and the final inactive_score target for downstream Python work.
+	- For customers who are not included the score is set to NULL
+	- For included customers who has no second loan, assign score = 1
+	- For included customers who has second loan which is within 180 days after the first loan, calculate score = days between loans ÷ 180
+	- For included customers who has second loan which is outside 180 days after the first loan, assign score = 1
+- **Output the modeling table** : Return one row per customer containing first/second loan timing, the 180-day window boundary, the include_flag, and the final inactive_score target for downstream Python work.
 
 **Python Method**
-- Compute and visualize activation-time metrics by signup month, applying a cutoff defined as last month in the data minus 18 months so that only fully observable cohorts are included in trend analysis.
-  
+- **Load the modeling table**: Read the SQL output (one row per borrowing customer) and keep only rows where inactive_score is not null so the target is fully observable.
+- **Validate the target**: Convert inactive_score to numeric and keep only valid values so summaries and plots do not break or misread the target.
+- **Measure portfolio-level full inactivity**: Compute the share of observable customers with inactive_score = 1.00 to quantify customers who did not return within 180 days.
+- **Summarize return timing distribution**: Describe and plot the distribution of inactive_score to separate the “fully inactive” mass at 1.00 from the return-timing spread among customers who came back within 180 days.
+- **Create outcome buckets for communication**: Bucket customers into Low/Medium/High groups using fixed thresholds on inactive_score so results are easy to explain and compare across segments.
+
+<br>
+
+**Charts**
+
+<p align="center">
+  <img src="Charts/02_2a_borrower_inactivity_and_churn_risk.png" width="100%">
+</p>
+
+**Key Insights**
+- The cutoff is set at 18 months before the latest data point because historical cohorts show that activation commonly occurs up to about one year after signup, and the additional buffer ensures cohorts are fully observed before analysis. Therefore, everything AFTER the cutoff line should not be considered for analytics.
+- For fully observed cohorts (before the cutoff), both average and median activation days steadily decline, indicating faster activation over time.
+- The median is consistently lower than the average, showing that activation times are right-skewed with a long tail of very late activators.
+- The sharp drop in activation days after the cutoff is not meaningful because those cohorts are not fully observed.
+- Activated customer counts increase while activation times decrease before the cutoff, indicating improved activation speed without sacrificing volume.
+- Early cohorts show higher volatility in activation timing, likely due to process immaturity or smaller sample sizes.
+
+<br>
+
+<p align="center">
+  <img src="Charts/02_2b_borrower_inactivity_and_churn_risk.png" width="100%">
+</p>
+
+<br>
 <br>
