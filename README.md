@@ -1,4 +1,4 @@
-# WIP ( Work in Progress ) Feb 7th 2026
+# WIP ( Work in Progress ) Feb 8th 2026
 
 # Consumer Lending “Cica PRIME” Credit Risk and Portfolio Analytics  
 **Risk Management • Portfolio Analytics • Forecasting • Stress Testing**
@@ -381,14 +381,24 @@ Which customers are likely to stop borrowing or become inactive after their init
 - loans — loan timing and frequency
 
 **SQL Method**
-- **Build customer loan timeline**: create one row per loan with **customer_id**, **origination_date**, and a loan sequence number per customer.
-- **Select the first loan per customer**: keep only loan sequence = 1 to define **first_loan_date** for each customer.
-- **Find the second loan date (if any)**: for each customer, find the earliest **origination_date** where loan sequence = 2 as **second_loan_date**.
-- **Define the churn window**: set **window_end_date** = **first_loan_date** + **churn_window_days** (use a fixed rule like 180 days).
-- **Create churn label**: set **churn_flag** = 1 if **second_loan_date** is null or **second_loan_date** > **window_end_date**; otherwise **churn_flag** = 0.
-- **Create first-loan features**: keep first-loan fields used for prediction (example: **principal**, **term_months**, **apr**, merchant category if relevant), using only information available at origination.
-- **Attach customer attributes** (including signup_date): join to customers and bring in **signup_date** plus stable attributes (channel, risk tier at signup, income band, region, age band).
-- **Assemble customer-level churn table**: output one row per customer with **customer_id**, **signup_date**, **first_loan_date**, **second_loan_date**, **window_end_date**, churn label, and features.
+- **Order loans and set end date**: 
+	Assign a fixed end date (2025-12-31) and number each customer’s loans by origination date.
+- **Find the first loan**:
+	Keep the first loan per customer as the starting point.
+- **Find the second loan**:
+  	Keep the second loan per customer, if it exists.
+- **Create the 180-day window**: 
+	Add 180 days to the first loan date to define how long we wait for a return loan.
+- **Decide who is included**: 
+	Mark customers as included only if their full 180-day window fits inside the data.
+- **Calculate inactivity score**:
+	Included + second loan within 180 days → days between loans ÷ 180
+	Included + no second loan (or after 180 days) → score = 1
+	Not included → score = NULL
+- **Attach customer attributes**: 
+	Join the score to the customers table to add stable customer information.
+- **Output the final table**: 
+	One row per borrowing customer with attributes and inactivity score, ready for Python.
 
 **Python Method**
 - Compute and visualize activation-time metrics by signup month, applying a cutoff defined as last month in the data minus 18 months so that only fully observable cohorts are included in trend analysis.
