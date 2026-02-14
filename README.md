@@ -337,11 +337,15 @@ A table with these columns
 **1.4. Delinquency & Default Trends**<br><br>
 Did borrowers begin falling behind on payments before credit losses increased sharply, and how did the monthly 30+ days-past-due (30+ DPD) rate evolve over time?
 
+<br>
+
 **Tables used**
 - payment_schedule
 - payments
 - loans
 - dim_month
+
+<br>
 
 **SQL Method**
 
