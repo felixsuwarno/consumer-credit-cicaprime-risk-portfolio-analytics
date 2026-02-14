@@ -36,7 +36,7 @@ Consumer lending analytics and KPI design, credit portfolio performance analysis
 1. **Revenue performance & outlook** <br> How did monthly interest and fee revenue perform from 2023–2025, and what is the expected revenue trajectory over the next 12 months?
 2. **Cash inflows vs contractual expectations** <br> How do actual monthly cash collections compare to scheduled cash collections from 2023–2025, and what is the resulting monthly collection gap? How large is the monthly collection gap relative to scheduled cash, and how stable is this gap over time?
 3. **Budget vs actual performance** <br> How reliable is financial planning given deviations between budgeted and realized revenue, cash inflows, and losses?
-4. **Delinquency & default trends** <br> Did borrowers begin falling behind on payments before credit losses increased sharply, and how did the monthly 30+ days-past-due (30+ DPD) rate evolve over time?
+4. **Delinquency & default trends** <br> Did borrowers begin falling behind on payments before credit losses increased sharply?
 
 **2 — Borrower Activation, Churn & Value**
 
@@ -335,7 +335,7 @@ A table with these columns
 <br>
 
 **1.4. Delinquency & Default Trends**<br><br>
-Did borrowers begin falling behind on payments before credit losses increased sharply, and how did the monthly 30+ days-past-due (30+ DPD) rate evolve over time?
+Did borrowers begin falling behind on payments before credit losses increased sharply?
 
 <br>
 
