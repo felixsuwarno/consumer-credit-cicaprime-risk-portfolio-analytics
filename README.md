@@ -154,7 +154,13 @@ How did total portfolio interest and fee revenue perform on a monthly basis from
 
 **Key Insights**
 
-TO BE WRITTEN
+- Revenue rose consistently from 2023 through 2025 as the loan portfolio expanded and more borrowers generated interest and fee income. 
+- Early-stage growth was rapid due to the small starting base, while later growth reflects a more mature and scaled lending operation.
+- The upward movement is mainly driven by portfolio expansion rather than strong seasonal effects.
+- Month-to-month revenue fluctuations remain moderate relative to the overall growth trend, indicating stable performance.
+- The 12-month forecast points to continued growth if current portfolio dynamics persist.
+
+All revenue figures reflect cash actually collected from borrowers, ensuring alignment with real liquidity rather than accounting estimates.
 
 <br><br>
 
