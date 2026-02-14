@@ -343,7 +343,17 @@ Did borrowers begin falling behind on payments before credit losses increased sh
 - loans
 - dim_month
 
+**SQL Method**
 
+- **Build monthly observation timeline:** Use dim_month to create a consistent month-end timeline so delinquency is measured at the same snapshot date each month.
+- **Define scheduled loan obligations:** From payment_schedule, compute each loan’s cumulative scheduled amount due through every installment so total contractual exposure is known as of any point in time.
+- **Aggregate payments as-of month-end:** From payments, calculate total amount paid per loan on or before each month-end to ensure no forward-looking leakage.
+- **Compute outstanding balance as-of snapshot:** For each loan-month, calculate outstanding exposure as cumulative scheduled due minus cumulative payments made on or before that month-end.
+- **Flag 30+ days-past-due loans:** For each loan-month, mark the loan as 30+ DPD if any unpaid installment has a due date at least 30 days prior to month-end and remains outstanding.
+- **Define active exposure denominator:** From loans, identify loans that were originated on or before month-end and still outstanding (not fully repaid and not defaulted) as the monthly exposure base.
+- **Calculate monthly 30+ DPD rate:** For each month, divide the number of 30+ DPD loans by the number of active loans to produce the delinquency trend over time.
+- **Measure monthly default volume:** Using loans.default_date, count defaults per month to compare timing of delinquency buildup versus realized credit losses.
+- **SQL output:** a table with these columns: year_month, active_loans, dpd30_loans, dpd30_rate, defaulted_loans
 
 <br><br>
 
