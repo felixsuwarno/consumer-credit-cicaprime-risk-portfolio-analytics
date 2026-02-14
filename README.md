@@ -335,6 +335,15 @@ A table with these columns
 <br>
 
 **1.4. Delinquency & Default Trends**
+How have delinquency and default rates evolved, and what do these trends indicate about portfolio credit health?
+
+**Tables used**
+- payment_schedule
+- payments
+- loans
+- dim_month
+
+
 
 <br><br>
 
