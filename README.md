@@ -1,4 +1,4 @@
-# WIP ( Work in Progress ) Feb 8th 2026
+# WIP ( Work in Progress ) Feb 14th 2026
 
 # Consumer Lending “Cica PRIME” Credit Risk and Portfolio Analytics  
 **Risk Management • Portfolio Analytics • Forecasting • Stress Testing**
@@ -198,7 +198,11 @@ How stable / reliable are monthly collection gaps across this period?
 <br>
 
 **Key Insights**
-TO BE WRITTEN
+- Actual cash collected falls short of scheduled cash in the large majority of months (32 out of 35), indicating a consistent collection gap.
+- On average, monthly collections are about 4–5% below contractual expectations.
+- Over-collection occurs rarely and only by small margins, suggesting upside surprises are limited.
+- The largest shortfall occurred early in the portfolio lifecycle, with performance stabilizing in later periods.
+- Month-to-month variation in the gap is moderate, showing the shortfall pattern is persistent rather than random.
 
 <br><br>
 
