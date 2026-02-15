@@ -1,0 +1,23 @@
+WITH base_monthly_paid_revenue AS
+(
+	SELECT
+		DATE_TRUNC('month', payment_date)::date AS year_month,
+		SUM(paid_fee_interest) AS actual_revenue
+	FROM payments
+	WHERE payment_type IN ('scheduled','partial')
+	GROUP BY 1
+),
+
+monthly_actual_revenue AS
+(
+	SELECT
+		dm.month_start AS year_month,
+		COALESCE(bmpr.actual_revenue, 0) AS actual_revenue
+	FROM dim_month dm
+	LEFT JOIN base_monthly_paid_revenue bmpr
+	ON dm.month_start = bmpr.year_month
+)
+
+SELECT *
+FROM monthly_actual_revenue
+ORDER BY year_month;
