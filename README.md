@@ -352,7 +352,6 @@ Did borrowers begin falling behind on payments before credit losses increased sh
 To create the required table, the process is complex. Therefore, the SQL logic was separated into four sequential scripts. Each script must be executed in order. This approach mimics how real banks structure data pipelines. Breaking the logic into smaller steps reduces cognitive load, makes debugging easier, and allows each stage to be verified independently.
 
 **01_4a — Scheduled Payment Plan**
-
 - Build a month-end calendar from **dim_month** so each reporting month has a consistent **month_end** date.
 - Join **payment_schedule** to the calendar using **due_date** <= **month_end** so each installment is counted once it becomes due.
 - Aggregate to one row per **loan_id** + **month_end** and sum **due_total** to compute **due_at_month_end**.
@@ -382,6 +381,23 @@ To create the required table, the process is complex. Therefore, the SQL logic w
 - Separately aggregate loans to count defaulted_loans by default month.
 - Join delinquency metrics to monthly defaults.
 - Output one monthly portfolio table showing delinquency trend and default trend side-by-side.
+
+<br>
+
+**Python Method**
+
+- **Load the monthly trend dataset:** Read 01_4d_portfolio_delinquency_trend.csv, parse year_month as a date, sort by time, and set year_month as the time index so each row represents one month.
+- S**tandardize column names for stability:** Normalize column names (trim spaces, lowercase, replace spaces with underscores) so later steps do not break due to formatting differences.
+- **Normalize the 30+ delinquency metric:** Identify the DPD 30+ rate column and convert it into a consistent percentage series so it is comparable month to month.
+- **Smooth the signals for trend reading:** Compute a 3-month rolling average for DPD 30+ rate and for monthly defaulted loans to reduce noise and make the direction of change easier to see.
+- **Convert bucket counts into portfolio mix shares:** If delinquency bucket count columns exist (Current, 1–29, 30–59, 60–89, 90+), divide each bucket by active_loans to create bucket share percentages for portfolio mix tracking.
+- **Test whether delinquency leads defaults:** Run a lead/lag correlation check across multiple month lags to measure whether increases in DPD 30+ tend to show up before increases in defaults, and estimate the typical lead time in months.
+
+<br>
+
+**Charts**
+
+
 
 <br><br>
 
