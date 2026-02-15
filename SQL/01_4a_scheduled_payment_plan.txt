@@ -1,0 +1,42 @@
+WITH spine_calendar AS
+(
+    SELECT
+        CAST(DATE_TRUNC('month', month_start) AS DATE) AS year_month,
+        CAST(DATE_TRUNC('month', month_start) + INTERVAL '1 month' - INTERVAL '1 day' AS DATE) AS month_end
+    FROM dim_month
+    ORDER BY year_month
+),
+
+payment_schedule_join_dim_month AS
+(
+    SELECT
+        ps.loan_id,
+        sc.year_month,
+        sc.month_end,
+        ps.due_total
+    FROM spine_calendar sc
+    JOIN payment_schedule ps
+        ON ps.due_date <= sc.month_end
+    ORDER BY ps.loan_id, sc.year_month
+),
+
+fact_payment_schedule_month_end AS
+(
+    SELECT
+        loan_id,
+        year_month,
+        month_end,
+        SUM(due_total) AS due_at_month_end
+    FROM payment_schedule_join_dim_month
+    GROUP BY
+        loan_id,
+        year_month,
+        month_end
+    ORDER BY
+        loan_id,
+        year_month
+)
+
+SELECT *
+FROM fact_payment_schedule_month_end
+ORDER BY loan_id, year_month;

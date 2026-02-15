@@ -1,0 +1,113 @@
+WITH join_scheduled_and_paid AS
+(
+    SELECT
+        s.loan_id,
+        s.year_month,
+        s.month_end,
+        s.due_at_month_end,
+        p.paid_at_month_end
+    FROM "01_4a_scheduled_payment_plan" s
+    LEFT JOIN "01_4b_collected_payments" p
+        ON s.loan_id = p.loan_id
+       AND s.month_end = p.month_end
+    ORDER BY s.loan_id, s.year_month
+),
+
+calc_unpaid_at_month_end AS
+(
+    SELECT
+        loan_id,
+        year_month,
+        month_end,
+        due_at_month_end,
+        COALESCE(paid_at_month_end, 0) AS paid_at_month_end,
+        CASE
+            WHEN due_at_month_end - COALESCE(paid_at_month_end, 0) < 0 THEN 0
+            ELSE due_at_month_end - COALESCE(paid_at_month_end, 0)
+        END AS unpaid_at_month_end
+    FROM join_scheduled_and_paid
+    ORDER BY loan_id, year_month
+),
+
+join_unpaid_to_payment_schedule AS
+(
+    SELECT
+        u.loan_id,
+        u.year_month,
+        u.month_end,
+        u.due_at_month_end,
+        u.paid_at_month_end,
+        u.unpaid_at_month_end,
+        ps.due_date
+    FROM calc_unpaid_at_month_end u
+    JOIN payment_schedule ps
+        ON u.loan_id = ps.loan_id
+       AND ps.due_date <= u.month_end
+    WHERE u.unpaid_at_month_end > 0
+    ORDER BY u.loan_id, u.year_month, ps.due_date
+),
+
+calc_oldest_unpaid_due_date AS
+(
+    SELECT
+        loan_id,
+        year_month,
+        month_end,
+        MIN(due_date) AS oldest_unpaid_due_date
+    FROM join_unpaid_to_payment_schedule
+    GROUP BY
+        loan_id,
+        year_month,
+        month_end
+    ORDER BY
+        loan_id,
+        year_month
+),
+
+--  dpd is days past due
+calc_dpd_days AS
+(
+    SELECT
+        u.loan_id,
+        u.year_month,
+        u.month_end,
+        u.due_at_month_end,
+        u.paid_at_month_end,
+        u.unpaid_at_month_end,
+        oud.oldest_unpaid_due_date,
+        CASE
+            WHEN oud.oldest_unpaid_due_date IS NULL THEN 0
+            ELSE CAST(u.month_end AS DATE) - CAST(oud.oldest_unpaid_due_date AS DATE)
+        END AS dpd_days
+    FROM calc_unpaid_at_month_end u
+    LEFT JOIN calc_oldest_unpaid_due_date oud
+        ON u.loan_id = oud.loan_id
+       AND u.month_end = oud.month_end
+    ORDER BY u.loan_id, u.year_month
+),
+
+delinquency_at_month_end AS
+(
+    SELECT
+        loan_id,
+        year_month,
+        month_end,
+        due_at_month_end,
+        paid_at_month_end,
+        unpaid_at_month_end,
+        oldest_unpaid_due_date,
+        dpd_days,
+        CASE
+            WHEN dpd_days = 0 THEN 'Current'
+            WHEN dpd_days BETWEEN 1 AND 29 THEN '1-29'
+            WHEN dpd_days BETWEEN 30 AND 59 THEN '30-59'
+            WHEN dpd_days BETWEEN 60 AND 89 THEN '60-89'
+            ELSE '90+'
+        END AS dpd_bucket
+    FROM calc_dpd_days
+    ORDER BY loan_id, year_month
+)
+
+SELECT *
+FROM delinquency_at_month_end 
+ORDER BY loan_id, year_month;

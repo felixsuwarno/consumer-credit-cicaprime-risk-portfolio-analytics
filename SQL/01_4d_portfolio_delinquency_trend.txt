@@ -1,0 +1,55 @@
+WITH delinquency_monthly AS
+(
+    SELECT
+        year_month,
+        COUNT(*) AS active_loans,
+        SUM(CASE WHEN dpd_bucket = 'Current' THEN 1 ELSE 0 END) AS current_loans,
+        SUM(CASE WHEN dpd_bucket = '1-29' THEN 1 ELSE 0 END) AS dpd_1_29_loans,
+        SUM(CASE WHEN dpd_bucket = '30-59' THEN 1 ELSE 0 END) AS dpd_30_59_loans,
+        SUM(CASE WHEN dpd_bucket = '60-89' THEN 1 ELSE 0 END) AS dpd_60_89_loans,
+        SUM(CASE WHEN dpd_bucket = '90+' THEN 1 ELSE 0 END) AS dpd_90_plus_loans,
+        CASE
+            WHEN COUNT(*) = 0 THEN 0
+            ELSE
+                (
+                    SUM(CASE WHEN dpd_bucket IN ('30-59','60-89','90+') THEN 1 ELSE 0 END)::NUMERIC
+                    / COUNT(*)::NUMERIC
+                )
+        END AS dpd_30_plus_rate
+    FROM "01_4c_delinquency_at_month_end"
+    GROUP BY year_month
+    ORDER BY year_month
+),
+
+defaults_monthly AS
+(
+    SELECT
+        CAST(DATE_TRUNC('month', default_date) AS DATE) AS year_month,
+        COUNT(*) AS defaulted_loans
+    FROM loans
+    WHERE default_date IS NOT NULL
+    GROUP BY CAST(DATE_TRUNC('month', default_date) AS DATE)
+    ORDER BY year_month
+),
+
+portfolio_delinquency_trend AS
+(
+    SELECT
+        d.year_month,
+        d.active_loans,
+        d.current_loans,
+        d.dpd_1_29_loans,
+        d.dpd_30_59_loans,
+        d.dpd_60_89_loans,
+        d.dpd_90_plus_loans,
+        ROUND(d.dpd_30_plus_rate,2),
+        COALESCE(x.defaulted_loans, 0) AS defaulted_loans
+    FROM delinquency_monthly d
+    LEFT JOIN defaults_monthly x
+        ON d.year_month = x.year_month
+    ORDER BY d.year_month
+)
+
+SELECT *
+FROM portfolio_delinquency_trend
+ORDER BY year_month;

@@ -1,0 +1,61 @@
+WITH spine_calendar AS
+(
+    SELECT
+        CAST(DATE_TRUNC('month', month_start) AS DATE) AS year_month,
+        CAST(DATE_TRUNC('month', month_start) + INTERVAL '1 month' - INTERVAL '1 day' AS DATE) AS month_end
+    FROM dim_month
+    ORDER BY year_month
+),
+
+payments_total_payment_daily AS
+(
+    SELECT
+        loan_id,
+        payment_date,
+        SUM
+        (
+            CASE
+                WHEN payment_type IN ('scheduled','partial') THEN payment_amount
+                WHEN payment_type = 'refund' THEN -1 * payment_amount
+                ELSE 0
+            END
+        ) AS total_payment
+    FROM payments
+    WHERE payment_type IN ('scheduled','partial','refund')
+    GROUP BY loan_id, payment_date
+    ORDER BY loan_id, payment_date
+),
+
+payments_spined AS
+(
+    SELECT
+        p.loan_id,
+        sc.year_month,
+        sc.month_end,
+        p.total_payment
+    FROM spine_calendar sc
+    JOIN payments_total_payment_daily p
+        ON p.payment_date <= sc.month_end
+    ORDER BY p.loan_id, sc.year_month
+),
+
+fact_payments_at_month_end AS
+(
+    SELECT
+        loan_id,
+        year_month,
+        month_end,
+        SUM(total_payment) AS paid_at_month_end
+    FROM payments_spined
+    GROUP BY
+        loan_id,
+        year_month,
+        month_end
+    ORDER BY
+        loan_id,
+        year_month
+)
+
+SELECT *
+FROM fact_payments_at_month_end
+ORDER BY loan_id, year_month;
