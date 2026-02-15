@@ -349,17 +349,24 @@ Did borrowers begin falling behind on payments before credit losses increased sh
 
 **SQL Method**
 
-- **Define scheduled loan obligations:** From payment_schedule, compute each loan’s cumulative scheduled amount due through each installment so contractual exposure can be measured as of any reporting date.
-- **Aggregate realized payments:** From payments, sum total payments per loan up to each reporting date so repayment progress is measured without using future payments.
-- **Compute outstanding exposure:** For each loan and reporting date, calculate outstanding amount as cumulative scheduled due minus cumulative payments made up to that reporting date.
-- **Compute days past due at snapshot:** For each loan and reporting date, identify the oldest unpaid due date (earliest installment still outstanding) and calculate dpd_days = reporting_date - oldest_unpaid_due_date.
-- **Assign risk bucket:** Classify each loan-month into one bucket using dpd_days: Current (0), 1–29, 30–59, 60–89, 90+; treat loans with no unpaid installments as Current.
-- **Define active loan population:** From loans, keep loans that are originated on/before the reporting date and not defaulted on/before the reporting date as the eligible population for monthly risk distribution.
-- **Apply consistent month-end snapshots: Use dim_month month-end as the reporting date for every month so buckets are comparable over time.
-- **Summarize monthly bucket mix and 30+ DPD rate:** For each month, count loans in each risk bucket and compute 30+ DPD rate as (30–59 + 60–89 + 90+) divided by active loans.
-- **Overlay monthly defaults: From loans.default_date, count defaults per month to compare whether bucket deterioration appears before defaults rise.
-- **SQL output:** a table with these columns:
-year_month, active_loans, current_loans, dpd_1_29_loans, dpd_30_59_loans, dpd_60_89_loans, dpd_90_plus_loans, dpd_30_plus_rate, defaulted_loans
+To create the required table, the process is complex. Therefore, the SQL logic was separated into four sequential scripts. Each script must be executed in order. This approach mimics how real banks structure data pipelines. Breaking the logic into smaller steps reduces cognitive load, makes debugging easier, and allows each stage to be verified independently.
+
+**01_4a — Scheduled Payment Plan**
+
+- Build a month-end calendar from dim_month so each reporting month has a consistent month_end date.
+- Join payment_schedule to the calendar using due_date <= month_end so each installment is counted once it becomes due.
+- Aggregate to one row per loan_id + month_end and sum due_total to compute due_at_month_end.
+- Output the cumulative contractual amount that should have been paid by each month-end.
+
+**01_4b — Collected Payments**
+- Build a month-end calendar from dim_month.
+- Clean payments at the daily level:
+		- Keep scheduled and partial as positive.
+  		- Convert refund to negative.
+- Join cleaned payments to month-end using payment_date <= month_end so payments accumulate through time.
+- Aggregate to one row per loan_id + month_end and sum as paid_at_month_end.
+- Output the cumulative cash actually paid by each month-end.
+
 
 <br><br>
 
