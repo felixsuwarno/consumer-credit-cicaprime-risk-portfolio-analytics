@@ -397,7 +397,27 @@ To create the required table, the process is complex. Therefore, the SQL logic w
 
 **Charts**
 
+<p align="center">
+  <img src="Charts/01_4a_delinquency_vs_default.png" width="100%">
+</p>
 
+**Key Insights**
+- DPD 30+ starts rising early and keeps trending upward.
+- Defaults stay low at first, then increase later.
+- Defaults move more sharply month-to-month; DPD rises more steadily.
+- The rise in delinquency happens before the sustained rise in defaults.
+
+<br>
+
+<p align="center">
+  <img src="Charts/01_4b_dpd_bucket_shares_overtime.png" width="100%">
+</p>
+
+**Key Insights**
+- The share of Current loans gradually declines over time.
+- The 90+ delinquency bucket steadily increases.
+- Early delinquency (1–29) rises before severe delinquency builds.
+- Loans appear to migrate from Current → early delinquency → severe delinquency over time.
 
 <br><br>
 
