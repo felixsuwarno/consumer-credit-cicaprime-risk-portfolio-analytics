@@ -315,7 +315,7 @@ This work produces three tables.
 - The difference between planned and actual losses became very large, especially during peak months.
 - Compared to revenue and cash, credit losses were the biggest source of budget problems.
 
-<br>
+<br><br>
 
 **1.4. Delinquency & Default Trends**<br><br>
 Did borrowers begin falling behind on payments before credit losses increased sharply?
