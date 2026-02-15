@@ -287,7 +287,6 @@ This work produces three tables.
 - The variance trend shows a shift from outperformance in early years to underperformance later, suggesting planning assumptions became more aggressive than realized revenue growth.
 
 <br>
-<br>
 
 <p align="center">
   <img src="Charts/01_3b_budget_vs_actual_on_cash.png" width="100%">
@@ -300,13 +299,13 @@ This work produces three tables.
 - The variance trend shows the deviation becoming more negative over time, meaning the difference between expected and realized cash did not correct as the portfolio matured.
 - By late 2025, the cash gap reached its widest levels, signaling structural pressure on liquidity relative to plan.
 
-<br><br>
+<br>
 
 <p align="center">
   <img src="Charts/01_3c_budget_vs_actual_on_credit_loss.png" width="100%">
 </p>
 
-<br><br>
+<br>
 
 **Key Insights**
 - Actual credit losses were much higher than planned in most months after early 2024.
