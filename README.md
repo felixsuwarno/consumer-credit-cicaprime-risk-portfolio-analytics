@@ -478,32 +478,33 @@ Which customers are likely to stop borrowing or become inactive after their init
 **Charts**
 
 <p align="center">
-  <img src="Charts/02_2a_borrower_inactivity_and_churn_risk.png" width="100%">
+  <img src="Charts/02_2a_borrower_inactivity_and_churn_risk.png" style="width:75%;">
+</p
+
+<br>
+
+<p align="center">
+  <img src="Charts/02_2b_borrower_inactivity_and_churn_risk.png" style="width:75%;">
+</p
+
+<br>
+
+<p align="center">
+  <img src="Charts/02_2c_borrower_inactivity_and_churn_risk.png" style="width:75%;">
+</p
+
+<br>
+
+<p align="center">
+  <img src="Charts/02_2d_borrower_inactivity_and_churn_risk.png" style="width:75%;">
 </p>
 
 <br>
 
 <p align="center">
-  <img src="Charts/02_2b_borrower_inactivity_and_churn_risk.png" width="100%">
+  <img src="Charts/02_2e_borrower_inactivity_and_churn_risk.png" style="width:75%;">
 </p>
 
-<br>
-
-<p align="center">
-  <img src="Charts/02_2c_borrower_inactivity_and_churn_risk.png" width="100%">
-</p>
-
-<br>
-
-<p align="center">
-  <img src="Charts/02_2d_borrower_inactivity_and_churn_risk.png" width="100%">
-</p>
-
-<br>
-
-<p align="center">
-  <img src="Charts/02_2e_borrower_inactivity_and_churn_risk.png" width="100%">
-</p>
 
 **Key Insights**
 - Roughly 60–65% of customers do not return for a second loan within 180 days, meaning first-loan churn is common.
