@@ -224,23 +224,23 @@ Did actual revenue earned, cash collected, and credit losses differ from what ma
 This work produces three tables.
 
 **Actual Revenue:**
-- **Identify realized revenue cashflows:** Use the payments table and keep only rows where payment_type IN ('scheduled','partial') so revenue reflects interest/fees actually collected.
-- **Aggregate to monthly revenue:** Group by payment_date month and sum paid_fee_interest to produce actual_revenue by year_month.
-- **Preserve missing months:** Left join the monthly revenue series to dim_month on month_start so every month appears even when revenue is zero, and fill missing months with 0.
+- **Identify realized revenue cashflows:** Use the payments table and keep only rows where **payment_type** IN ('scheduled','**partial******') so revenue reflects interest/fees actually collected.
+- **Aggregate to monthly revenue:** Group by **payment_date** month and sum **paid_fee_interest** to produce **actual_revenue** by year_month.
+- **Preserve missing months:** Left join the monthly revenue series to **dim_month** on **month_start** so every month appears even when revenue is zero, and fill missing months with 0.
 - **Output the revenue table:** Return **year_month** and **actual_revenue** ordered by **year_month**. 
 
 **Actual Cash:**
 - **Identify all cash collected:** Use the payments table and include all payment rows so this metric captures total cash inflow, not just revenue.
-- **Aggregate to monthly cash:** Group by payment_date month and sum payment_amount to produce actual_cash by year_month.
-- **Preserve missing months:** Left join the monthly cash series to dim_month on month_start so every month appears even when cash is zero, and fill missing months with 0.
+- **Aggregate to monthly cash:** Group by **payment_date** month and sum **payment_amount** to produce **actual_cash** by year_month.
+- **Preserve missing months:** Left join the monthly cash series to **dim_month** on month_start so every month appears even when cash is zero, and fill missing months with 0.
 - **Output the cash table:** Return **year_month** and **actual_cash** ordered by **year_month**.
 
 **Actual Net Credit Loss:**
 - **Identify default events:** Filter loans to only defaulted loans where **default_date** IS NOT NULL so losses are tied to actual defaults.
-- **Measure unpaid principal at default:** Left join defaulted loans to payments on loan_id and keep only payments with **payment_date** <= **default_date**, then sum paid_principal for payment_type IN ('scheduled','partial') to compute principal_paid_pre_default.
+- **Measure unpaid principal at default:** Left join defaulted loans to payments on loan_id and keep only payments with **payment_date** <= **default_date**, then sum paid_principal for **payment_type** IN ('**scheduled**','**partial**') to compute **principal_paid_pre_default**.
 - **Aggregate monthly principal loss:** For each defaulted loan compute principal - **principal_paid_pre_default** and sum by the month of default_date to produce **actual_loss_unpaid_principal** by year_month.
 - **Preserve missing months for loss:** Left join monthly principal loss to **dim_month** so every month appears, and fill missing months with 0.
-- **Measure monthly recoveries:** From payments, filter to payment_type = **'recovery'** and sum **payment_amount** by month to produce **actual_loss_recovered_principal**.
+- **Measure monthly recoveries:** From payments, filter to **payment_type** = **'recovery'** and sum **payment_amount** by month to produce **actual_loss_recovered_principal**.
 - **Compute monthly net loss:** For each month compute **actual_loss** = **actual_loss_unpaid_principal** - **actual_loss_recovered_principal**, using 0 for missing recoveries, and output **year_month** and **actual_loss** ordered by month.
 
 <br>
