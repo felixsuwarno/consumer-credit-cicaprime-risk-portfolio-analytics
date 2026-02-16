@@ -506,7 +506,12 @@ Which customers are likely to stop borrowing or become inactive after their init
 </p>
 
 **Key Insights**
-TO BE WRITTEN
+- Roughly 60–65% of customers do not return for a second loan within 180 days, meaning first-loan churn is common.
+- Risk tier at signup is the strongest driver of inactivity, with a wide gap between Tier A and Tier D—lower tiers are far more likely to stop borrowing.
+- Income level shows only small differences in inactivity, so earning more does not strongly predict repeat borrowing.
+- Age groups behave similarly, with no major separation in churn risk across age bands.
+- Region has minimal impact, as inactivity rates are nearly the same across locations.
+- Acquisition channel differences are modest, and no channel changes churn risk as meaningfully as risk tier does.
 
 <br><br>
 
