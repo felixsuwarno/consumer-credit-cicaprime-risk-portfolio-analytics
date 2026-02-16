@@ -1,4 +1,4 @@
-# WIP ( Work in Progress ) Feb 14th 2026
+# WIP ( Work in Progress ) Feb 16th 2026
 
 # Consumer Lending “Cica PRIME” Credit Risk and Portfolio Analytics  
 **Risk Management • Portfolio Analytics • Forecasting • Stress Testing**
@@ -515,19 +515,27 @@ Which customers are expected to generate the highest lifetime value after accoun
 - payments
 
 **SQL Method**
-- **Define 180-day evaluation window:** For each loan, create a cutoff date equal to origination date + 180 days. This ensures all loans are evaluated over the same time horizon.
-- **Restrict payments to the evaluation window:** Keep only payments made on or before the cutoff date. Preserve loans with no payments to avoid overstating performance.
-- **Identify defaults within 180 days:** Create a flag equal to 1 when the loan defaulted on or before the cutoff date; otherwise 0. This separates true credit losses from active balances.
-- **Compute cumulative cash and principal per loan:** Within the 180-day window, calculate running totals of payment amount (cash collected) and principal repaid for each loan.
-- **Select one snapshot row per loan:** Use row_number logic to retain the most recent payment record within the window. This ensures exactly one row per loan before aggregation.
-- **Calculate loan-level loss at 180 days:**
-  - Outstanding principal at 180 days = original principal − cumulative principal repaid.
-  - **Loss_180d** = outstanding principal only if default occurred within 180 days; otherwise 0.
-- **Roll up to customer level:** Group by customer_id and compute:
-  - **Total_payment_180d** = sum of cumulative payments across loans
-  - **Total_loss_180d** = sum of loss_180d across loans
-  - **Net_ltv_180d** = **Total_payment_180d** − **Total_loss_180d**
-- **Rank customers by value:** Order customers by **Net_ltv_180d** descending to identify the highest-value customers after accounting for credit losses.
+Two tables are created for the purpose of this business question, to simplify the steps.
+
+**02_3a_customer_LTV_180d**
+This is done first, to process and prepare necessary data and generate base table for LTV calculations.
+
+- **Extract the loan population:** Pull one row per loan with core contract fields (**customer_id**, **loan_id**, **origination_date**, **principal**, **default_date**) to define the exposure base.
+- **Filter valid payment events:** Keep only cash-collection payment types (**scheduled**, **partial**) so LTV reflects real collected cash.
+- **Combine loans with payments:** Left join loans to payments so every loan remains in the dataset, including those with no payments.
+- **Apply a 180-day observation window:** Create a cutoff date equal to origination date plus 180 days and retain only payments occurring within this window, while keeping loans with no payments.
+- **Flag defaults within the window:** Mark loans as defaulted only if **default_date** exists and falls within the 180-day period.
+- **Compute cumulative cash and principal per loan:** For each loan, calculate running totals of collected cash and principal repaid within the 180-day window, and assign a row number to identify the final event snapshot.
+- **Select one 180-day snapshot per loan:** Keep only the final row per loan so each loan is represented once at the end of the 180-day period.
+- **Calculate unpaid principal and credit loss:** Compute outstanding principal at 180 days and recognize it as loss only if the loan defaulted within the window.
+- **Aggregate to the customer level:** Sum 180-day payments and losses across all loans per customer and compute net LTV as payments minus losses, then rank customers by net value.
+
+**02_3b_customer_LTV_180d_summary**
+This query summarizes the LTV data into a set of statistics that are easier to read and compare.
+
+- **Split customers into 5 equal-sized LTV groups:** Sort customers by net_ltv_180d from highest to lowest and assign each customer to a bucket (1–5) using NTILE(5), where each bucket represents about 20% of customers.
+- **Summarize value and loss by bucket:** For each bucket, compute customer count plus key statistics for payments, losses, and net LTV, including averages, minimum/maximum net LTV, and total sums, rounding outputs to 2 decimals for clean reporting.
+- **Return bucket results in order:** Output the bucket-level summary table ordered from bucket 1 to bucket 5 for easy comparison across tiers.
 
 <br>
 <br>
