@@ -536,6 +536,14 @@ This query summarizes the LTV data into a set of statistics that are easier to r
 - **Split customers into 5 equal-sized LTV groups:** Sort customers by net_ltv_180d from highest to lowest and assign each customer to a bucket (1–5) using NTILE(5), where each bucket represents about 20% of customers.
 - **Summarize value and loss by bucket:** For each bucket, compute customer count plus key statistics for payments, losses, and net LTV, including averages, minimum/maximum net LTV, and total sums, rounding outputs to 2 decimals for clean reporting.
 - **Return bucket results in order:** Output the bucket-level summary table ordered from bucket 1 to bucket 5 for easy comparison across tiers.
+  
+**Python Method**
+- **Load customer-level LTV data:** Read **02_3a_customer_LTV_180d**.csv into a dataframe so each row represents one customer’s 180-day performance.
+- **Compute total collected cash:** Sum the total_payment_180d column to measure how much cash the portfolio collected within 180 days.
+- **Compute total credit losses:** Sum the total_loss_180d column to measure how much principal was lost due to defaults within 180 days.
+- **Identify the most profitable customer:** Sort customers by net_ltv_180d in descending order and select the first row to find the highest net value contributor.
+- **Generate a concise report:** Print the portfolio-level totals and the top customer’s metrics in a clean, readable format for documentation and review.
+
 
 <br>
 <br>
