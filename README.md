@@ -434,7 +434,12 @@ How long does it take customers to activate into credit usage by originating the
 </p>
 
 **Key Insights**
-TO BE WRITTEN
+- Customers who signed up in early 2023 took a very long time to activate, often close to one year before taking their first loan.
+- Activation speed improved gradually through 2024, meaning customers started borrowing sooner after signup.
+- Around mid-2024, activation time dropped more sharply than before, suggesting a meaningful change in product, credit policy, or acquisition strategy.
+- By 2025, most customers were activating within weeks instead of months.
+- The difference between average and median activation days became smaller over time, showing that activation behavior became more consistent across customers.
+- At the same time, the number of activated customers increased, meaning the business scaled volume without slowing down activation speed.
 
 <br>
 <br>
