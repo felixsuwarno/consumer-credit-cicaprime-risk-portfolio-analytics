@@ -640,9 +640,16 @@ The rules and definition :
 
 **Tables used :**
 - loans
-- payment_schedule
-- payments
 - customers
+
+**SQL Methods :**
+- **Add origination month label:** Create **origination_month** by truncating **origination_date** to the first day of its month so all loans from the same month group together.
+- **Attach customer risk tier:** Join the loans to the customers table using **customer_id** so each loan carries **risk_tier_at_signup** for risk segmentation.
+- **Flag 12-month observability:** Create **is_pd_eligible** by marking loans as 1 only when the loan’s **origination_date** is on or before DATE '2024-12-31', meaning a full 12 months can be observed in the dataset.
+- **Flag default within 12 months:** Create **is_default_12m** by marking 1 when **default_date** exists and occurs on or before origination_date + INTERVAL '12 months', otherwise 0.
+- **Final Output:** One row per loan with: **loan_id** , **customer_id** , **origination_date** , **origination_month** , **default_date** , **risk_tier_at_signup** , **is_pd_eligible** , **is_default_12m**
+
+
 
 
 
