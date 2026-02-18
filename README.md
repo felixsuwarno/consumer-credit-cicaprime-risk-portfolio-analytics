@@ -583,7 +583,7 @@ How concentrated is customer value, and how dependent is portfolio performance o
 <br>
 
 <p align="center">
-  <img src="Charts/02_4_value_concentration_pareto_curve.png" style="width:25%;">
+  <img src="Charts/02_4_value_concentration_pareto_curve.png" style="width:100%;">
 </p>
 
 **Key Insights**
