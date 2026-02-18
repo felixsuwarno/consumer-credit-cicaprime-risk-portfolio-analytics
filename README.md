@@ -662,7 +662,7 @@ The rules and definition :
 <br>
 
 <p align="center">
-  <img src="Charts/03_1a_pd_by_risk_tier.png" style="width:25%;">
+  <img src="Charts/03_1a_pd_by_risk_tier.png" style="width:100%;">
 </p>
 
 **Key Insights**
@@ -675,7 +675,7 @@ The rules and definition :
 <br>
 
 <p align="center">
-  <img src="Charts/03_1b_pd_by_vintage.png" style="width:25%;">
+  <img src="Charts/03_1b_pd_by_vintage.png" style="width:100%;">
 </p>
 
 **Key Insights**
@@ -686,8 +686,71 @@ The rules and definition :
 - There is no consistent upward pattern across vintages, suggesting underwriting quality has not steadily worsened.
 
 <br>
+<br>
 
+**3.1. Exposure at default (EAD)** <br>
+How much exposure remains outstanding at the time loans default?
 
+The rules and definition :
+
+1) Exposure Definition (Principal-Only Rule)
+  - EAD is defined as the remaining principal balance at the moment the loan defaults.
+  - Only principal exposure is considered.
+  - Interest, fees, penalties, and any other non-principal components are excluded from the calculation.
+
+2) Default Reference Point (Timing Rule)
+  - EAD is measured on the recorded default_date for each loan.
+  - The default_date represents the first date the loan is classified as defaulted under the project’s default definition.
+
+Only loans with a non-null default_date are included in EAD measurement.
+
+3) Principal Paid Before Default
+
+Principal Repaid Before Default is the total sum of paid_principal amounts where payment_date is on or before default_date.
+
+Payments occurring after default_date are ignored.
+
+If no principal payments were made before default, the value is treated as zero.
+
+4) EAD Calculation (Loan-Level)
+
+EAD is calculated at the loan level (not at the customer level and not at the payment row level).
+
+For each defaulted loan:
+
+EAD = Original Principal − Principal Repaid Before Default
+
+If the calculation produces a negative value due to data irregularities, EAD is floored at zero.
+
+Each defaulted loan contributes one EAD observation.
+
+5) Measurement Scope (Defaulted Loans Only)
+
+Only loans that default are included in EAD measurement.
+
+Non-defaulted loans are excluded because there is no default event to measure exposure against.
+
+A customer with multiple defaulted loans contributes multiple EAD observations.
+
+Data Scope Notes (Explicit Exclusions)
+
+The following elements are not included in EAD:
+
+Accrued interest
+
+Unpaid interest
+
+Late fees
+
+Penalty charges
+
+Service or administrative fees
+
+Collection costs
+
+Legal expenses
+
+Revolving credit exposure adjustments (e.g., undrawn commitment factors) are not applicable in this installment-loan portfolio.
 
 
 
