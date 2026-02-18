@@ -636,8 +636,13 @@ The rules and definition :
 - Loans without required schedule data to compute DPD are excluded from the eligible set (data-quality exception).
 - Early payoff does not count as default unless the loan already crossed 90+ DPD before payoff.
 
+<br>
 
-
+**Tables used :**
+- loans
+- payment_schedule
+- payments
+- customers
 
 
 
