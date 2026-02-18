@@ -596,7 +596,7 @@ How concentrated is customer value, and how dependent is portfolio performance o
 
 <br>
 
-**3.1. Probability of default (PD)**
+**3.1. Probability of default (PD)**  
 Which individual loans are most likely to default based on borrower, loan, and early behavior signals?
 
 The rules and definition :
@@ -688,7 +688,7 @@ The rules and definition :
 <br>
 <br>
 
-**3.1. Exposure at default (EAD)**  
+**3.2. Exposure at default (EAD)**  
 How much exposure remains outstanding at the time loans default?
 
 The rules and definition :
