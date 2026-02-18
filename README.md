@@ -693,12 +693,12 @@ How much exposure remains outstanding at the time loans default?
 
 The rules and definition :
 
-1) Exposure Definition (Principal-Only Rule)
-<!-- -->
+**1) Exposure Definition (Principal-Only Rule)**
 - EAD is defined as the remaining principal balance at the moment the loan defaults.
 - Only principal exposure is considered.
 - Interest, fees, penalties, and any other non-principal components are excluded from the calculation.
-  
+
+
 2) Default Reference Point (Timing Rule)
 <!-- -->
 - EAD is measured on the recorded default_date for each loan.
