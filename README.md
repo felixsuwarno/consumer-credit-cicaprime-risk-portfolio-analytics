@@ -700,7 +700,6 @@ The rules and definition :
 - Only principal exposure is considered.
 - Interest, fees, penalties, and any other non-principal components are excluded from the calculation.
 
-
 **2) Default Reference Point (Timing Rule)**
 - EAD is measured on the recorded default_date for each loan.
 - The default_date represents the first date the loan is classified as defaulted under the project’s default definition.
@@ -724,6 +723,8 @@ The rules and definition :
 - A customer with multiple defaulted loans contributes multiple EAD observations.
 - Data Scope Notes (Explicit Exclusions)
 
+<br>
+
 The following elements are not included in EAD:
 - Accrued interest
 - Unpaid interest
@@ -733,6 +734,10 @@ The following elements are not included in EAD:
 - Collection costs
 - Legal expenses
 - Revolving credit exposure adjustments (e.g., undrawn commitment factors) are not applicable in this installment-loan portfolio.
+
+<br>
+
+
 
 
 
