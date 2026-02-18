@@ -741,9 +741,9 @@ The following elements are not included in EAD:
 - **Filter to defaulted loans:** Select **loan_id** / **customer_id** / **origination_date** fields and **principal** from loans table, keep only rows where **default_date** is not null ( we only care about loans that defaulted ), and derive **origination_month** from **origination_date** using **DATE_TRUNC**.
 - **Attach borrower risk tier:** Left join **customers** table onto the defaulted-loans set by **customer_id** to bring in **risk_tier_at_signup** for segmentation.
 - **Attach payment history:** Left join **payments** onto the loan-level rows by **loan_id** to add **payment_date** and **paid_principal** so payments can be evaluated relative to **default_date**.
-- **Sum principal paid by default:** Group by **loan_id** and sum **paid_principal** only when **payment_date** is on or before **default_date**, treating null **paid_principal** as 0 via COALESCE.
+- **Sum principal paid when the loan defaulted:** Group by **loan_id** and sum **paid_principal** only when **payment_date** is on or before **default_date**, treating null **paid_principal** as 0 via COALESCE.
 - **Rebuild the defaulted-loan base:** Select the loan-level fields (including **risk tier** and **principal**) from the loans+customers CTE to create a clean one-row-per-loan spine for the final output.
-- **Join principal-paid back to loans:** Left join the aggregated principal_paid_on_default onto the loan-level base by loan_id and default missing values to 0 to avoid null math.
+- **Join principal-paid back to loans:** Left join the aggregated **principal_paid_on_default** onto the loan-level base by **loan_id** and default missing values to 0 to avoid null math.
 - **Compute principal unpaid at default:** Calculate **principal_unpaid_on_default** as max(**principal** minus **principal_paid_on_default**, 0) and sort by **customer_id** and **loan_id** for readable output.
 - **The output table:** one row per defaulted loan with **customer_id**, **loan_id**, **origination_date**, **origination_month**, **default_date**, **risk_tier_at_signup**, original **principal**, **principal_paid_on_default**, and **principal_unpaid_on_default** (the remaining principal at default under the project’s principal-only EAD definition).
 
