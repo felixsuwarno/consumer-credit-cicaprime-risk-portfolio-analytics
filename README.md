@@ -699,28 +699,24 @@ The rules and definition :
 - Interest, fees, penalties, and any other non-principal components are excluded from the calculation.
 
 
-2) Default Reference Point (Timing Rule)
-<!-- -->
+**2) Default Reference Point (Timing Rule)**
 - EAD is measured on the recorded default_date for each loan.
 - The default_date represents the first date the loan is classified as defaulted under the project’s default definition.
 - Only loans with a non-null default_date are included in EAD measurement.
 
-3) Principal Paid Before Default
-<!-- -->
+**3) Principal Paid Before Default**
 - Principal Repaid Before Default is the total sum of paid_principal amounts where payment_date is on or before default_date.
 - Payments occurring after default_date are ignored.
 - If no principal payments were made before default, the value is treated as zero.
 
-4) EAD Calculation (Loan-Level)
-<!-- -->
+**4) EAD Calculation (Loan-Level)**
 - EAD is calculated at the loan level (not at the customer level and not at the payment row level).
 - For each defaulted loan:
 - EAD = Original Principal − Principal Repaid Before Default
 - If the calculation produces a negative value due to data irregularities, EAD is floored at zero.
 - Each defaulted loan contributes one EAD observation.
 
-5) Measurement Scope (Defaulted Loans Only)
-<!-- -->
+**5) Measurement Scope (Defaulted Loans Only)**
 - Only loans that default are included in EAD measurement.
 - Non-defaulted loans are excluded because there is no default event to measure exposure against.
 - A customer with multiple defaulted loans contributes multiple EAD observations.
