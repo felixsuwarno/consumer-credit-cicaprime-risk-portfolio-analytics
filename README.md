@@ -599,6 +599,44 @@ How concentrated is customer value, and how dependent is portfolio performance o
 **3.1. Probability of default (PD)**
 Which individual loans are most likely to default based on borrower, loan, and early behavior signals?
 
+The rules and definition :
+
+**1) Time Horizon (12 months)**
+- PD is measured over 12 months starting from each loan’s origination date.
+- A loan is eligible only if the dataset contains the full 12-month window.
+- With data ending on 2025-12-31, only loans originated on or before 2024-12-31 are included.
+- Loans originated after 2024-12-31 are excluded because their 12-month outcome cannot be fully observed.
+
+**2) Default Event (Primary Rule: 90+ Days Past Due)**
+- A loan is considered “defaulted” if it reaches 90 or more Days Past Due (DPD) at any time within its 12-month observation window.
+- DPD is defined at the scheduled-installment level:
+  - An installment has a due date from the contractual payment schedule.
+  - If the full due amount is not covered by payments applied to that installment, the installment is considered unpaid.
+  - DPD counts calendar days since the due date.
+  - If an installment is later fully covered, DPD stops on the date it becomes fully covered.
+  - If an installment is never fully covered, DPD is measured up to the end of the 12-month window.
+
+**3) Single Default Trigger (No Double Counting)**
+- The loan default date is the first date the loan crosses 90+ DPD.
+- Once defaulted, the loan stays defaulted for PD counting purposes.
+- Each loan can default at most once.
+
+**4) Measurement Unit (Loan-Level)**
+- Default is measured at the loan level (not at the payment row level and not at the customer level).
+- Each eligible loan contributes:
+  - 1 = defaulted within 12 months
+  - 0 = not defaulted within 12 months
+- A customer with multiple loans can contribute multiple loan observations.
+
+**5) PD Calculation**
+- For any segment (example: risk tier at signup, origination month):
+  PD = (number of eligible loans that default within 12 months) / (total eligible loans)
+
+**Data Quality Notes (Rule-Based Handling)**
+- Loans without required schedule data to compute DPD are excluded from the eligible set (data-quality exception).
+- Early payoff does not count as default unless the loan already crossed 90+ DPD before payoff.
+
+
 
 
 
