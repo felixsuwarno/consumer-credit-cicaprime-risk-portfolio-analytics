@@ -762,6 +762,7 @@ The following elements are not included in EAD:
   <img src="Charts/03_2a_ead_by_risk_tier.png" style="width:100%;">
 </p
 
+**Key Insights**
 - When loans default, the remaining unpaid balance is roughly similar across risk tiers, so higher-risk tiers do not show much bigger balances at the moment of default.
 - Tier B has the largest unpaid balance at default on average, meaning its defaults tend to happen with more money still owed.
 - Tier D has the fewest defaults (N=5), so its average balance is not very reliable and can swing a lot from just a few loans.
@@ -772,6 +773,7 @@ The following elements are not included in EAD:
   <img src="Charts/03_2b_ead_by_vintage.png" style="width:100%;">
 </p
 
+**Key Insights**
 - The average unpaid balance at default generally increases for newer origination months, meaning recent loans tend to default with more money still owed.
 - Early months (like 2023-01) show extreme values because very few loans defaulted, so one large loan can distort the average.
 - From mid-2024 onward, the average unpaid balance becomes consistently higher, suggesting larger loan sizes or earlier-stage defaults.
