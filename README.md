@@ -796,16 +796,34 @@ The rules and definition :
   - Only principal exposure is considered in the loss calculation.
   - Interest, fees, penalties, and other non-principal components are excluded.
 
+**2) Default Reference Point (Anchor Rule)**
+  - LGD is calculated only for loans with a non-null default_date.
+  - The default_date is the same event used to measure EAD.
+  - LGD uses the EAD already defined in Section 3.2 as the exposure base.
 
+**3) Recoveries After Default**
+  - Recoveries are defined as the total sum of paid_principal amounts where payment_date is strictly after default_date.
+  - Payments on or before default_date are excluded because they are already reflected in EAD.
+  - If no principal payments are received after default, recovery is treated as zero.
 
+**4) LGD Calculation (Loan-Level)**
+  - LGD is calculated at the loan level.
+  - For each defaulted loan:
+  - Loss = EAD − Principal Recovered After Default
+  - LGD = Loss ÷ EAD
+  - If recoveries exceed EAD due to data irregularities, LGD is floored at zero.
+  - If EAD equals zero, the observation is excluded from LGD calculation to avoid division errors.
+  - Each defaulted loan contributes one LGD observation.
 
+**5) Portfolio LGD (Aggregation Rule)**
+  - Portfolio LGD is calculated using a weighted approach.
+  - Portfolio LGD = Total Loss Across Defaulted Loans ÷ Total EAD Across Defaulted Loans.
+  - This ensures larger exposures appropriately influence the portfolio result.
 
-
-
-
-
-
-
+**6) Measurement Scope (Defaulted Loans Only)**
+  - Only loans with a default event are included in LGD measurement.
+  - Non-defaulted loans are excluded because no loss event occurred.
+  - A customer with multiple defaulted loans contributes multiple LGD observations.
 
 
 
