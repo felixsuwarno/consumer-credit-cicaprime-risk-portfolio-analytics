@@ -766,7 +766,7 @@ The following elements are not included in EAD:
 - Tier B has the largest unpaid balance at default on average, meaning its defaults tend to happen with more money still owed.
 - Tier D has the fewest defaults (N=5), so its average balance is not very reliable and can swing a lot from just a few loans.
 
-<br>
+<br><br>
 
 <p align="center">
   <img src="Charts/03_2b_ead_by_vintage.png" style="width:100%;">
