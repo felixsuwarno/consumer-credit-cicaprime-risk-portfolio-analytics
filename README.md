@@ -599,6 +599,8 @@ How concentrated is customer value, and how dependent is portfolio performance o
 **3.1. Probability of default (PD)**  
 Which individual loans are most likely to default based on borrower, loan, and early behavior signals?
 
+The fully observable window in this dataset is between 2023 to 2024 dataset, so the calculations we make for this business question reflects that.
+
 The rules and definition :
 
 **1) Time Horizon (12 months)**
@@ -780,6 +782,31 @@ The following elements are not included in EAD:
 - Months with very small default counts (low N above bars) should be interpreted cautiously because averages are unstable when sample size is small.
 
 <br>
+<br>
+
+**3.3. Loss Given Default (LGD)**  
+How severe are losses after recoveries, and how do they vary across segments?
+
+The fully observable window in this dataset is between 2023 to 2024 dataset, so the calculations we make for this business question reflects that.
+
+The rules and definition :
+
+**1) Loss Definition (Principal-Only Loss Rule)**
+  - LGD measures the proportion of principal that is not recovered after default.
+  - Only principal exposure is considered in the loss calculation.
+  - Interest, fees, penalties, and other non-principal components are excluded.
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
