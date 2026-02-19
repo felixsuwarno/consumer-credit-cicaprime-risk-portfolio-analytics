@@ -772,8 +772,12 @@ The following elements are not included in EAD:
   <img src="Charts/03_2b_ead_by_vintage.png" style="width:100%;">
 </p
 
+- The average unpaid balance at default generally increases for newer origination months, meaning recent loans tend to default with more money still owed.
+- Early months (like 2023-01) show extreme values because very few loans defaulted, so one large loan can distort the average.
+- From mid-2024 onward, the average unpaid balance becomes consistently higher, suggesting larger loan sizes or earlier-stage defaults.
+- Months with very small default counts (low N above bars) should be interpreted cautiously because averages are unstable when sample size is small.
 
-
+<br>
 
 
 
