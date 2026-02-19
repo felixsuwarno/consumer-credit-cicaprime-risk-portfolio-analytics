@@ -749,6 +749,14 @@ The following elements are not included in EAD:
 - **Compute principal unpaid at default:** Calculate **principal_unpaid_on_default** as max(**principal** minus **principal_paid_on_default**, 0) and sort by **customer_id** and **loan_id** for readable output.
 - **The output table:** one row per defaulted loan with **customer_id**, **loan_id**, **origination_date**, **origination_month**, **default_date**, **risk_tier_at_signup**, original **principal**, **principal_paid_on_default**, and **principal_unpaid_on_default** (the remaining principal at default under the project’s principal-only EAD definition).
 
+<br>
+
+**Python methods :**
+- **Load loan-level EAD output	:** parse **origination_date**, **origination_month**, and **default_date** as dates.
+- **Summarize EAD by vintage	:** Group by **origination_month** and compute **defaulted_loan_count**, total **principal_unpaid_on_default**, and average **principal_unpaid_on_default**.
+- **Summarize EAD by risk tier	:** Group by **risk_tier_at_signup** and compute **defaulted_loan_count**, total **principal_unpaid_on_default**, and average **principal_unpaid_on_default**.
+
+<br>
 
 
 
