@@ -876,17 +876,17 @@ The rules and definition :
 **3.4. Vintage risk performance**  
 How do cumulative default and cumulative loss rates compare across origination vintages at 12 months-on-book?
 
+The fully observable window in this dataset is between 2023 to 2024 dataset, so all of the calculations we make here reflect that.
+
 For the purpose of answering this business question, there will be three separate reports ( tables ).
-A. A cumulative default table 
-B. A cumulative loss table
-C. A delinquency roll-rate table
+- cumulative default table
+- cumulative loss table
+- delinquency roll-rate table
    
 <br> 
 
 **3.4A. Cumulative Default Table**  
 A cumulative default table shows, for each group of loans that started in the same month, what percentage of those loans have defaulted by a specific point in time, such as 12 months after they began. It measures how many loans have failed out of the original group and expresses that as a rate, so we can compare how different groups performed over the same time period.
-
-The fully observable window in this dataset is between 2023 to 2024 dataset, so the calculations we make for this business question reflects that.
 
 **SQL Methods :**
 
@@ -898,4 +898,21 @@ The fully observable window in this dataset is between 2023 to 2024 dataset, so 
   - Add **n_default_12m_loans** as the sum of **is_default_12m**.
 - **Calculate the first-year failure percentage:** Create **cdr_12m** as **n_default_12m_loans** / **n_loans_in_vintage**.
 - **Show the final table:** **origination_month**, **n_loans_in_vintage**, **n_default_12m_loans**, **cdr_12m**.
+
+**Python Methods :**
+- Python is used to visualize the chart, no further processing is necessary.
+
+
+
+**SQL Methods :**
+- **Pick the loans we are allowed to measure:** Filter loans to origination dates in 2023–2024 only, and keep one row per loan with **loan_id**, **origination_month**, and **default_month** so each loan has a start month and a possible default date.
+- **Bring in the unpaid balance at default:** Left join the output table from **Business Question 3.2 — Exposure at Default (EAD)**, specifically the table `"03_2_exposure_at_default"`, and take the column **principal_unpaid_on_default** so each loan has the unpaid principal amount calculated at default.
+- **Set the 12-month check date:** Add **mob12** as **origination_month** + INTERVAL '12 months' so each loan has a clear “first birthday” date when we check if it defaulted within 12 months.
+- **Compute first-year loss per loan:** Create **loss_12m** equal to **principal_unpaid_on_default** if **default_month** is not NULL and **default_month** <= **mob12**, otherwise 0.
+- **Sum how much loss happened in each vintage:** Group by **origination_month**.
+  - Add **n_loans_in_vintage** as the count of **loan_id**.
+  - Add **total_loss_12m** as the sum of **loss_12m**.
+- **Calculate the first-year cumulative loss per loan:** Create **clr_12m** as **total_loss_12m** / **n_loans_in_vintage**.
+- **Show the final table:** **origination_month**, **n_loans_in_vintage**, **total_loss_12m**, **clr_12m**.
+
 
