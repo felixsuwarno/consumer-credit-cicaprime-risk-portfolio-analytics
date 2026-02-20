@@ -1,0 +1,76 @@
+WITH payments_prep AS
+(
+    SELECT 
+        loan_id,
+        payment_date,
+        paid_principal
+    FROM cica_prime.payments
+),
+
+ead_joins_payments AS
+(
+    SELECT 
+        ead.loan_id,
+        ead.default_date,
+        ead.origination_date,
+        ead.risk_tier_at_signup,
+        p.payment_date,
+        p.paid_principal,
+        ead.principal_unpaid_on_default
+    FROM cica_prime."03_2_exposure_at_default" ead
+    LEFT JOIN payments_prep p
+        ON ead.loan_id = p.loan_id
+),
+
+ead_filter_recovery_payments AS
+(
+    SELECT *
+    FROM ead_joins_payments
+    WHERE payment_date > default_date
+       OR payment_date IS NULL
+),
+
+lgd_recovered_principal_after_default AS
+(
+    SELECT 
+        loan_id,
+        origination_date,
+        CAST(DATE_TRUNC('month', origination_date) AS DATE) AS year_month,
+        risk_tier_at_signup,
+        principal_unpaid_on_default,
+        SUM(COALESCE(paid_principal,0)) AS recovered_principal_after_default
+    FROM ead_filter_recovery_payments
+    GROUP BY 
+        loan_id,
+        origination_date,
+        risk_tier_at_signup,
+        principal_unpaid_on_default
+),
+
+lgd_principal_loss AS
+(
+    SELECT 
+        loan_id,
+        year_month,
+        risk_tier_at_signup,
+        principal_unpaid_on_default,
+        recovered_principal_after_default,
+        GREATEST(
+            principal_unpaid_on_default - recovered_principal_after_default,
+            0
+        ) AS principal_loss
+    FROM lgd_recovered_principal_after_default
+),
+
+lgd_lgd_rate AS
+(
+    SELECT
+        *,
+        ROUND(principal_loss * 100.00 / principal_unpaid_on_default, 2) AS lgd_rate
+    FROM lgd_principal_loss
+    WHERE principal_unpaid_on_default <> 0
+	ORDER BY year_month
+)
+
+SELECT *
+FROM lgd_lgd_rate;
