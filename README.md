@@ -50,7 +50,7 @@ Consumer lending analytics and KPI design, credit portfolio performance analysis
 1. **Probability of default (PD)** <br> Which individual loans are most likely to default based on borrower, loan, and early behavior signals?
 2. **Exposure at default (EAD)** <br> How much exposure remains outstanding at the time loans default?
 3. **Loss given default (LGD)** <br> How severe are losses after recoveries, and how do they vary across segments?
-4. **Vintage risk performance** <br> How do cumulative defaults and losses evolve by origination vintage?
+4. **Vintage risk performance** <br> At 12 months-on-book, how do cumulative default and cumulative loss rates compare across vintages?
 5. **Credit policy & decision thresholds** <br> Where should approval, review, and rejection thresholds be set based on predicted default risk?
 6. **Model monitoring & governance** <br> How stable and well-calibrated are credit risk models over time?
 
@@ -869,4 +869,33 @@ The rules and definition :
 - From 2024 onward, when the number of defaults per month increases, LGD mostly stays between about 75% and 85%, which is more consistent.
 - Many 2025 months have higher default counts (10+ loans), so those LGD numbers are more reliable than the early months.
 - Overall, the pattern shows that when loans default, the bank usually loses around 80% of the unpaid principal, meaning recoveries are generally small.
+
+<br>
+<br>
+
+**3.4. Vintage risk performance**  
+How do cumulative default and cumulative loss rates compare across origination vintages at 12 months-on-book?
+
+For the purpose of answering this business question, there will be three separate reports ( tables ).
+A. A cumulative default table 
+B. A cumulative loss table
+C. A delinquency roll-rate table
+   
+<br> 
+
+**3.4A. Cumulative Default Table**  
+A cumulative default table shows, for each group of loans that started in the same month, what percentage of those loans have defaulted by a specific point in time, such as 12 months after they began. It measures how many loans have failed out of the original group and expresses that as a rate, so we can compare how different groups performed over the same time period.
+
+The fully observable window in this dataset is between 2023 to 2024 dataset, so the calculations we make for this business question reflects that.
+
+**SQL Methods :**
+
+- **Pick the loans we are allowed to measure:** Filter loans to origination dates in 2023–2024 only, and keep one row per loan with **loan_id**, **origination_month**, and **default_month** so each loan has a start month and a possible default date.
+- **Set the 12-month check date:** Add mob12 as **origination_month** + INTERVAL '12 months' so each loan has a clear “first birthday” date when we check if it failed.
+- **Mark whether the loan failed in its first year:** Create **is_default_12m** equal to 1 if **default_month** is not NULL and **default_month** <= **mob12**, otherwise 0.
+- **Count how many loans started and how many failed:** Group **cdt_is_default_12m** by **origination_month**.
+  - Add **n_loans_in_vintage** as the count of **loan_id**.
+  - Add **n_default_12m_loans** as the sum of **is_default_12m**.
+- **Calculate the first-year failure percentage:** Create **cdr_12m** as **n_default_12m_loans** / **n_loans_in_vintage**.
+- **Show the final table:** **origination_month**, **n_loans_in_vintage**, **n_default_12m_loans**, **cdr_12m**.
 
