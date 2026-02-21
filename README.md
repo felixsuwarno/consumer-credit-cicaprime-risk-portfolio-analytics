@@ -929,4 +929,11 @@ A cumulative loss table shows, for each group of loans that started in the same 
 - **Calculate the first-year cumulative loss per loan:** Create **clr_12m** as **total_loss_12m** / **n_loans_in_vintage**.
 - **Show the final table:** **origination_month**, **n_loans_in_vintage**, **total_loss_12m**, **clr_12m**.
 
+**Python Methods :**
+- Python is used to visualize the chart, no further processing is necessary.
 
+<br>
+
+<p align="center">
+  <img src="Charts/03_4b_cumulative_loss_rate.png" style="width:100%;">
+</p
